@@ -1,0 +1,72 @@
+<!-- views/login.ejs -->
+<!doctype html>
+<html>
+<head>
+  <title>Automata</title>
+
+  <!-- Load out assets: Bootstrap, Font Awesome Icons, and custom CSS !-->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+
+  <!-- Load custom css -->
+  <link rel="stylesheet" href="http://babbage.cs.missouri.edu/~jsc8vf/assets/custom.css">
+
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">Automata</a>
+      <ul class="nav navbar-nav">
+        <li><a href="/">Home</a></li>
+      </ul>
+      <a href="/logout" class="btn btn-danger navbar-right log"><span class="fa fa-unlink"></span> Logout</a>
+    </div>
+  </nav>
+
+  <!-- Jumbotron -->
+  <div class="jumbotron text-center">
+    <div class="container">
+      <h1><span class="fa fa-cogs"></span> Automata</h1>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="col-sm-6 col-sm-offset-3">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h1><span class="fa fa-sign-in"></span> Login</h1>
+        </div>
+
+        <div class="panel-body">
+
+          <!-- Show messages that come back from attempted log in, errors. -->
+          <% if (message.length > 0) { %>
+            <div class="alert alert-danger"><%= message %></div>
+          <% } %>
+
+          <form action="/login" method="post">
+            <div class="form-group">
+              <input type="text" class="form-control" name="username" placeholder="Username">
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control" name="password" placeholder="Password">
+            </div>
+
+            <button type="submit" class="btn btn-success">Login</button>
+          </form>
+
+          <hr>
+
+          <div class="btn-group btn-group-justified" role="group" aria-label="...">
+            <a role="button" class="btn btn-default" href="/"><span class="fa fa-home"></span> Home</a>
+            <a role="button" class="btn btn-default" href="/signup"><span class="fa fa-sign-in"></span> Sign-Up</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

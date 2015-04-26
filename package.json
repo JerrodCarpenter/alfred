@@ -1,0 +1,25 @@
+{
+  "name": "Automata",
+  "version": "0.0.0",
+  "description": "Home Automation",
+  "dependencies": {
+    "express"        : "latest",
+    "ejs"            : "latest",
+    "mongoose"       : "latest",
+    "body-parser"    : "latest",
+    "onoff"          : "latest",
+    "passport"       : "latest",
+    "passport-local" : "latest",
+    "connect-flash"  : "latest",
+    "bcrypt-nodejs"  : "latest",
+    "morgan"         : "latest",
+    "body-parser"    : "latest",
+    "cookie-parser"  : "latest",
+    "method-override": "latest",
+    "express-session": "latest",
+    "jquery"         : "latest",
+    "raspi"          : "latest",
+    "raspi-pwm"      : "latest"   
+},
+  "author": "teamDoor"
+}
