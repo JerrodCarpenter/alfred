@@ -1,4 +1,4 @@
-<!-- views/login.ejs -->
+<!-- views/profile.ejs -->
 <!doctype html>
 <html>
 <head>
@@ -6,8 +6,7 @@
 
   <!-- Load out assets: Bootstrap, Font Awesome Icons, and custom CSS !-->
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
   <!-- Load custom css -->
   <link rel="stylesheet" href="http://babbage.cs.missouri.edu/~jsc8vf/assets/custom.css">
 
@@ -36,29 +35,40 @@
 
     <div class="col-sm-6 col-sm-offset-3">
       <div class="panel panel-default">
+
         <div class="panel-heading">
-          <h1><span class="fa fa-users"></span> Add User</h1>
+          <h1><span class="fa fa-bell-o"></span> Security Status</h1>
         </div>
 
-        <div class="panel-body">
-          <form action="/signup" method="post">
-            <div class="form-group">
-              <input type="text" class="form-control" name="username" placeholder="Username">
-            </div>
-            <div class="form-group">
-              <input type="password" class="form-control" name="password" placeholder="Password">
-            </div>
+        <table class="table">
+          <tr>
+            <th>Item</th>
+            <th>Status</th>
+          </tr>
 
-            <div class="form-group">
-              <input type="radio" class="form-control" name="access" value="admin"/><span>Make admin.</span>
-              <input type="radio" class="form-control" name="access" value="not" checked="checked"/> Give one day access.
-            </div>
-            <hr>
-            <button type="submit" class="btn btn-success">Grant Access</button>
-          </form>
-        </div>
+          <tr>
+            <td>Front Door</td>
+            <!-- Display info about the door. -->
+            <% if (door) { %>
+              <td>Secure</td>
+            <% } else { %>
+              <td>Breached</td>
+            <% } %>
+          </tr>
+          <tr>
+            <td>Window</td>
+            <!-- Display info about the window. -->
+            <% if (wind) { %>
+              <td>Secure</td>
+            <% } else { %>
+              <td>Breached</td>
+            <% } %>
+          </tr>
+        </table>
       </div>
+
     </div>
+
   </div>
 </body>
 </html>

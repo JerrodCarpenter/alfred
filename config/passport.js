@@ -3,6 +3,7 @@
 // Load the passport strategy and our user model.
 var LocalStrategy = require('passport-local').Strategy;
 var User          = require('../app/models/user');
+var sanitizer     = require('sanitizer');
 
 // Export the function to the rest of our app.
 module.exports = function(passport) {
@@ -33,6 +34,18 @@ module.exports = function(passport) {
     // User.findOne wont fire unless data is sent back.
     process.nextTick(function() {
 
+      username = sanitizer.escape(username);
+      password = sanitizer.escape(password);
+
+      User.count(function(err, count) {
+        if (err)
+          return done(err);
+
+        if (!req.body.access && count > 0) {
+          return done(null, false, req.flash('signupMessage', "You don't have permissions for this."));
+        };
+      });
+
       // Attempt to find a user with the provided username in the database.
       User.findOne({ 'username' : username }, function(err, user) {
 
@@ -54,17 +67,12 @@ module.exports = function(passport) {
 
           // Check if admin or not.
           if (req.body.access && req.body.access != "admin") {
+
             // Set time for 1 day.
-
-            console.log("not admin.");
-
             time = new Date();
             time.setDate(time.getDate() + 1);
             newUser.access = time;
 
-            console.log(time);
-            console.log(newUser.date);
-            console.log(newUser);
           } else {
             newUser.access = null;
           }
@@ -91,6 +99,9 @@ module.exports = function(passport) {
   },
   function(req, username, password, done) {
 
+    username = sanitizer.escape(username);
+    password = sanitizer.escape(password);
+
     // Check to see if the user trying to log in exists in the database.
     User.findOne({ 'username' : username }, function(err, user) {
 
@@ -110,8 +121,6 @@ module.exports = function(passport) {
 
       if (user.access && user.access < time)
         return done(null, false, req.flash('loginMessage', 'Your access has been revoked.'));
-
-        console.log(user);
 
       // Else, correct credentials were supplied, return user.
       return done(null, user);

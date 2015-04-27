@@ -13,6 +13,7 @@ var bodyParser   = require('body-parser');
 var session      = require('express-session');
 var jquery       = require('jquery');
 var najax        = require('najax');
+var alfred       = require('./pifunctions.js');
 
 //Servo Variables
 var MAX = 100;
@@ -29,12 +30,6 @@ var ON = 1;
 //Window input pin is gpio 27 physical pin 13
 //Lock output in is gpio 18 physical pin 12
 //port 4 = physical pin 7
-var gpio         = require('onoff').Gpio,   // Constructor function for Gpio objects.
-	port17 				 = new gpio(17, 'high'), // Export GPIO #14 as an output. Will need
- 	port21         = new gpio(21, 'in', 'both'),
-	port27         = new gpio(27, 'in', 'falling'),
-	port25         = new gpio(25, 'out');
-	port4 	       = new gpio(4, 'out');
 
 // Require passport for authentication.
 require('./config/passport')(passport);
