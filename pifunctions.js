@@ -6,17 +6,19 @@ var PWM       = require('raspi-pwm').PWM;
 
 //Servo pin is auto set to gpio 18
 var GPIO      = require('onoff').Gpio;
-winOut    = new GPIO(17, 'out', 'high');
-winIn     = new GPIO(27, 'in', 'falling');
-doorOut   = new GPIO(10, 'out', 'high');
-doorIn    = new GPIO(9, 'in', 'falling');
-garageOut = new GPIO(4, 'out', 'low');
+winOut        = new GPIO(17, 'out', 'high');
+winIn         = new GPIO(27, 'in', 'falling');
+doorOut       = new GPIO(10, 'out', 'high');
+doorIn        = new GPIO(9, 'in', 'falling');
+garageOut     = new GPIO(4, 'out', 'low');
 
 //Variables
 var MAX = 100;
-var CENTER, LOCKED = 60;
-var MIN, UNLOCKED = 20;
-var garageIsOpen = false;
+var CENTER = 60;
+var UNLOCKED = 65;
+var MIN = 20;
+var LOCKED = 30;
+garageIsOpen = false;
 
 /////////Lock Door Function
 var lockDoor = function() {

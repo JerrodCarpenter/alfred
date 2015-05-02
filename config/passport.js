@@ -41,8 +41,23 @@ module.exports = function(passport) {
         if (err)
           return done(err);
 
-        if (!req.body.access && count > 0) {
-          return done(null, false, req.flash('signupMessage', "You don't have permissions for this."));
+        // User is first user to sign in, make admin.
+        if (!req.body.access && count == 0) {
+          // Else there is no user with that name, so create one.
+          var admin = new User();
+
+          // Set the username and password, being sure to hash the password.
+          admin.username = username;
+          admin.password = admin.generateHash(password);
+          admin.access = null;
+
+          // Save the newUser to the database.
+          admin.save(function(err) {
+            if (err)
+              throw err;
+
+            return done(null, admin);
+          });
         };
       });
 
@@ -66,15 +81,24 @@ module.exports = function(passport) {
           newUser.password = newUser.generateHash(password);
 
           // Check if admin or not.
-          if (req.body.access && req.body.access != "admin") {
 
-            // Set time for 1 day.
-            time = new Date();
-            time.setDate(time.getDate() + 1);
-            newUser.access = time;
+          // Allow user to make username and password, but disallow access.
+          if (!req.body.access) {
+            var current = new Date();
+
+            newUser.access = current;
 
           } else {
-            newUser.access = null;
+            if (req.body.access && req.body.access != "admin") {
+
+              // Set time for 1 day.
+              var time = new Date();
+              time.setDate(current.getDate() + 1);
+              newUser.access = time;
+
+            } else {
+              newUser.access = null;
+            }
           }
 
           // Save the newUser to the database.
@@ -105,8 +129,6 @@ module.exports = function(passport) {
     // Check to see if the user trying to log in exists in the database.
     User.findOne({ 'username' : username }, function(err, user) {
 
-      time = new Date();
-
       // If error, return error.
       if (err)
         return done(err);
@@ -118,9 +140,6 @@ module.exports = function(passport) {
       // If the password isn't valid, return appropriate message.
       if (!user.validPassword(password))
         return done(null, false, req.flash('loginMessage', 'Incorrect password for supplied username.'));
-
-      if (user.access && user.access < time)
-        return done(null, false, req.flash('loginMessage', 'Your access has been revoked.'));
 
       // Else, correct credentials were supplied, return user.
       return done(null, user);

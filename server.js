@@ -23,7 +23,8 @@ var raspi = require('raspi');
 var PWM = require('raspi-pwm').PWM;
 
 //garage variables
-var ON = 1;
+ON = 1;
+armed = true;
 
 //PINS ARE AS FOLLOWS
 //Window output pin  is gpio 17 physical pin 11
@@ -148,8 +149,6 @@ function send_notification(id) {
 //	});
 
 function exit() {
-  port17.unexport();
-	port27.unexport();
   process.exit();
 }
 

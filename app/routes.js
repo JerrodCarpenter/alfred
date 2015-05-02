@@ -9,6 +9,7 @@
 module.exports = function(app, passport) {
 
   var alfred = require('../pifunctions.js');
+  var guy    = require('../addem.js');
 
   // Home page, load index.ejs when visited.
   app.get('/', function(req, res) {
@@ -44,6 +45,31 @@ module.exports = function(app, passport) {
     });
   });
 
+  // User has pressed give access button, attempt to give access.
+  app.post('/access', isAdmin, function(req, res) {
+    if (req.body.access == 'admin') {
+      if (guy.makeAdmin(req.body.username)) {
+        req.flash('profileMessage', req.body.usernam + ' could not be found in the database.');
+      } else {
+        req.flash('profileInfo', req.body.username + ' has been made an admin.');
+      }
+    } else {
+      if (req.body.access == 'not') {
+        if (guy.giveAccess(req.body.username)) {
+          req.flash('profileMessage', req.body.usernam + ' could not be found in the database.');
+        } else {
+          req.flash('profileInfo', req.body.username + ' has been given one day access.');
+        }
+      }
+    }
+
+    res.render('profile.ejs', {
+      user : req.user,
+      message : req.flash('profileMessage'),
+      info : req.flash('profileInfo')
+    });
+  });
+
   // Sign-Up page, load signup.ejs when visted.
   app.get('/signup', alreadyLoggedIn, function(req, res) {
 
@@ -64,7 +90,7 @@ module.exports = function(app, passport) {
   // Profile page, load profile.ejs when visted.
   app.get('/profile', isLoggedIn, function(req, res) {
     if (req.query.error == 'perm') {
-      req.flash('profileMessage', 'You lack the permisions to execute this function.');
+      req.flash('profileMessage', 'You lack the permisions to execute this function, please talk to your administrator.');
     }
 
     res.render('profile.ejs', {
@@ -81,7 +107,7 @@ module.exports = function(app, passport) {
   });
 
   // Unlock door.
-  app.get('/door', isLoggedIn, function(req, res) {
+  app.get('/door', hasAccess, function(req, res) {
     alfred.unlockDoor();
     req.flash('profileInfo', 'The door has been unlocked.');
 
@@ -93,7 +119,7 @@ module.exports = function(app, passport) {
   });
 
   // Lock door.
-  app.get('/lock', isLoggedIn, function(req, res) {
+  app.get('/lock', hasAccess, function(req, res) {
     alfred.lockDoor();
     req.flash('profileInfo', 'The door has been locked.');
 
@@ -105,7 +131,7 @@ module.exports = function(app, passport) {
   });
 
   // Open garage.
-  app.get('/garage', isLoggedIn, function(req, res) {
+  app.get('/garage', hasAccess, function(req, res) {
     alfred.operateGarage();
     req.flash('profileInfo', 'The garage has been activated.');
 
@@ -116,7 +142,7 @@ module.exports = function(app, passport) {
     });
   });
 
-  app.get('/status', isLoggedIn, function(req, res) {
+  app.get('/status', hasAccess, function(req, res) {
     var doorCheck = alfred.checkDoor();
     var windowCheck = alfred.checkWindow();
 
@@ -127,6 +153,27 @@ module.exports = function(app, passport) {
     });
   });
 
+  app.get('/arm', hasAccess, function(req, res) {
+    armed = true;
+    req.flash('profileInfo', 'The system has been armed.');
+
+    res.render('profile.ejs', {
+      user : req.user,
+      message : req.flash('profileMessage'),
+      info : req.flash('profileInfo')
+    });
+  })
+
+  app.get('/disarm', hasAccess, function(req, res) {
+    armed = false;
+    req.flash('profileInfo', 'The system has been unarmed.');
+
+    res.render('profile.ejs', {
+      user : req.user,
+      message : req.flash('profileMessage'),
+      info : req.flash('profileInfo')
+    });
+  })
 };
 
 // Route middleware that verifies a user is logged in.
@@ -163,3 +210,23 @@ function isAdmin(req, res, next) {
   // Else, redirect to profile.
   res.redirect('/profile?error=perm');
 }
+
+function hasAccess(req, res, next) {
+
+  // If authenticated, continue.
+  if (req.isAuthenticated()) {
+    if (req.user.access) {
+      var time = new Date();
+
+      if (req.user.access > time)
+        return next();
+
+
+    } else {
+      return next();
+    }
+  }
+
+  // Else, redirect to profile.
+  res.redirect('/profile?error=perm');
+}//endfn

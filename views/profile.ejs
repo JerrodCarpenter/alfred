@@ -14,26 +14,33 @@
 <body>
 
   <!-- Navbar -->
+  <nav class="navbar navbar-default navbar-inverse" role="navigation">
+      <div class="navbar-header pull-left">
+        <div class="navbar-brand">Alfred</div>
+      </div>
+
+      <div class="navbar-header pull-right">
+        <ul class="nav navbar-nav pull-left">
+          <li class="btn btn-danger"><a href="/logout">Log Out</a> </li>
+        </ul>
+      </div>
+  </nav>
+
+<!--
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
       <a class="navbar-brand" href="#">Alfred</a>
       <ul class="nav navbar-nav">
         <li><a href="/">Home</a></li>
       </ul>
-      <a href="/logout" class="btn btn-danger navbar-right log"><span class="fa fa-unlink"></span> Logout</a>
+      <a href="/logout" class="btn btn-danger navbar-right log visible-cs-*"><span class="fa fa-unlink"></span> Logout</a>
     </div>
   </nav>
-
-  <!-- Jumbotron -->
-  <div class="jumbotron text-center">
-    <div class="container">
-      <h1><span class="fa fa-cogs"></span> Alfred</h1>
-    </div>
-  </div>
+  -->
 
   <div class="container">
+    <div class="col-md-6 col-md-offset-3">
 
-    <div class="col-sm-6 col-sm-offset-3">
       <div class="panel panel-default">
 
         <div class="panel-heading">
@@ -60,8 +67,7 @@
           <hr>
 
           <div class="btn-group btn-group-justified" role="group" aria-label="...">
-            <a role="button" class="btn btn-warning" href="/garage"><span class="fa fa-truck"></span> Open Garage</a>
-            <a role="button" class="btn btn-warning" href="/garage"><span class="fa fa-truck"></span> Close Garage</a>
+            <a role="button" class="btn btn-warning" href="/garage"><span class="fa fa-truck"></span> Operate Garage</a>
           </div>
 
           <hr>
